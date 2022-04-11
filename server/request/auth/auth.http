@@ -1,0 +1,20 @@
+### LOGIN DE USUARIO ###
+# @name login
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/auth/login
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "{{$dotenv USERNAME}}",
+    "password": "{{$dotenv PASSWORD}}"
+}
+
+### OBTENEMOS EL TOKEN DE AUTORIZACIÓN ###
+@authToken = {{login.response.body.token}}
+
+### CHECK TOKEN DE USUARIO ###
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/auth/check
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "token": "{{authToken}}"
+}

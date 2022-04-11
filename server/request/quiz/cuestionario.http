@@ -1,0 +1,53 @@
+### LOGIN DE USUARIO ###
+# @name login
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/auth/login
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "{{$dotenv USERNAME}}",
+    "password": "{{$dotenv PASSWORD}}"
+}
+
+### OBTENEMOS EL TOKEN DE AUTORIZACIÓN ###
+@authToken = {{login.response.body.token}}
+
+### OBTENEMOS TODOS LOS CUESTIONARIOS ###
+GET {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/cuestionarios
+    ?page=1
+    &pageSize=10
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+### CREAMOS UN CUESTIONARIO ###
+# @name create
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/cuestionarios
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "cuestionario1",
+    "descripcion": "Descripcion del cuestionario1"
+}
+
+### ID DE CUESTIONARIO ###
+@id = 613cdf6d4a223520f12298c2
+
+### OBTENEMOS DATOS DE UN CUESTIONARIO ###
+GET {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/cuestionarios/{{id}}
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+### ACTUALIZAMOS DATOS DE UN CUESTIONARIO ###
+PUT {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/cuestionarios/{{id}}
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "cuestionario actualizado",
+    "descripcion": "Descripcion del cuestionario actualizado"
+}
+
+### ELIMINAMOS UN CUESTIONARIO ###
+DELETE {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/cuestionarios/{{id}}
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}

@@ -1,0 +1,21 @@
+### LOGIN DE USUARIO ###
+# @name login
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/auth/login
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "{{$dotenv USERNAME}}",
+    "password": "{{$dotenv PASSWORD}}"
+}
+
+### OBTENEMOS EL TOKEN DE AUTORIZACIÓN ###
+@authToken = {{login.response.body.token}}
+
+### CREAMOS UN USUARIO ###
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/auth/usuarios
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "carlos.santander@gmail.com",
+    "password": "ad08dp11s"
+}

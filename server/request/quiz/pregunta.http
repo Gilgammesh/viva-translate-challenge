@@ -1,0 +1,76 @@
+### LOGIN DE USUARIO ###
+# @name login
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/auth/login
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "{{$dotenv USERNAME}}",
+    "password": "{{$dotenv PASSWORD}}"
+}
+
+### OBTENEMOS EL TOKEN DE AUTORIZACIÓN ###
+@authToken = {{login.response.body.token}}
+
+### OBTENEMOS TODAS LAS PREGUNTAS ###
+GET {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/preguntas
+    ?page=1
+    &pageSize=10
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+### CREAMOS UNA PREGUNTA ###
+# @name create
+POST {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/preguntas
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "pregunta 1",
+    "opciones": [
+        {
+            "opcion": "opcion 1",
+            "isValid": false
+        },
+        {
+            "opcion": "opcion 2",
+            "isValid": true
+        },
+        {
+            "opcion": "opcion 3",
+            "isValid": false
+        }
+    ],
+    "cuestionario": "6250f6ac1fe60d6c11bedcca"
+}
+
+### ID DE PREGUNTA ###
+@id = 6250f9f21fe60d6c11bedcd4
+
+### OBTENEMOS DATOS DE UNA PREGUNTA ###
+GET {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/preguntas/{{id}}
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+### ACTUALIZAMOS DATOS DE UNA PREGUNTA ###
+PUT {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/preguntas/{{id}}
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
+
+{
+    "nombre": "pregunta 1 actualizada",
+    "opciones": [
+        {
+            "opcion": "opcion 1",
+            "isValid": true
+        },
+        {
+            "opcion": "opcion 2",
+            "isValid": false
+        }
+    ]
+}
+
+### ELIMINAMOS UNA PREGUNTA ###
+DELETE {{$dotenv APP_HOST}}:{{$dotenv APP_PORT}}/api/quiz/preguntas/{{id}}
+Authorization: {{authToken}}
+Content-Type: {{$dotenv CONTENT_TYPE}}
